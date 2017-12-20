@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Eve Start</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+    <script src="/node_modules/core-js/client/shim.min.js"></script>
+    <script src="/node_modules/zone.js/dist/zone.js"></script>
+    <script src="/node_modules/systemjs/dist/system.src.js"></script>
+    <script src="system.conf.js"></script>
+    <script>
+      System.import('main.js').catch(e => console.log(e.message));
+    </script>
+  </head>
+  <body>
+    <app></app>
+  </body>
+</html>
