@@ -1,0 +1,16 @@
+{
+  "name": "mock-server",
+  "version": "1.0.0",
+  "description": "mock server",
+  "main": "server.js",
+  "repository": "https://github.com/StephHiyagon/-eve-start.git",
+  "author": "@StephHiyago-gcca",
+  "license": "MIT",
+  "private": true,
+  "scripts":{
+    "start": "node server.js"
+  },
+  "devDependencies": {
+    "express": "^4.16.2"
+  }
+}
