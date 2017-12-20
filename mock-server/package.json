@@ -7,10 +7,11 @@
   "author": "@StephHiyago-gcca",
   "license": "MIT",
   "private": true,
-  "scripts":{
+  "scripts": {
     "start": "node server.js"
   },
   "devDependencies": {
+    "body-parser": "^1.18.2",
     "express": "^4.16.2"
   }
 }
