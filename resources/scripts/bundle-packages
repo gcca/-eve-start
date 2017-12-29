@@ -1,0 +1,85 @@
+#!/usr/bin/fish
+
+if test -e build/packages
+  rm -rf build/packages
+end
+
+cp -r packages build
+
+set TSCONFIG '{
+  "compilerOptions": {
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "removeComments": true,
+    "sourceMap": true,
+    "target": "es6"
+  }
+}'
+
+set ROLLUPCONF "
+import angular from 'rollup-plugin-angular';
+import commonjs from 'rollup-plugin-commonjs';
+import resolve from 'rollup-plugin-node-resolve';
+import typescript from 'rollup-plugin-typescript';
+
+export default {
+  context: 'this',
+  external: [
+    '@angular/animations',
+    '@angular/common',
+    '@angular/compiler',
+    '@angular/core',
+    '@angular/forms',
+    '@angular/http',
+    '@angular/platform-browser',
+    '@angular/platform-browser-dynamic',
+    '@angular/router',
+  ],
+  globals: {
+    '@angular/animations': 'vendor._ng_animations',
+    '@angular/common': 'vendor._ng_common',
+    '@angular/compiler': 'vendor._ng_compiler',
+    '@angular/core': 'vendor._ng_core',
+    '@angular/forms': 'vendor._ng_forms',
+    '@angular/http': 'vendor._ng_http',
+    '@angular/platform-browser': 'vendor._ng_platformBrowser',
+    '@angular/platform-browser-dynamic': 'vendor._ng_platformBrowserDynamic',
+    '@angular/router': 'vendor._ng_router',
+  },
+  input: 'main.js',
+  output: {
+    exports: 'named',
+    file: 'bundle.js',
+    format: 'umd',
+    name: 'demo',
+    sourcemap: true,
+  },
+  plugins: [
+    angular(),
+    typescript(),
+    resolve({
+      jsnext: true,
+      main: true,
+      browser: true,
+    }),
+    commonjs(),
+  ],
+};"
+
+set PATH $PATH ../../../node_modules/.bin
+
+for package in (ls build/packages)
+  pushd build/packages/$package
+  echo $TSCONFIG > tsconfig.json
+  echo $ROLLUPCONF > rollup.conf.js
+  tsc -p .
+  rollup -c rollup.conf.js
+  rm tsconfig.json
+  rm rollup.conf.js
+  popd
+end
